@@ -1,0 +1,52 @@
+#!/usr/bin/bash
+echo -n "install/remove: "
+read choice1
+arg="$@"
+#os
+if [ -f /bedrock/etc/os-release ]; then
+		. /bedrock/etc/os-release
+	elif [ -f /etc/os-release ]; then
+		. /etc/os-release
+	elif [ -f /etc/lsb-release ]; then
+		. /etc/lsb-release
+		NAME=$DISTRIB_ID
+	fi
+    #if you want to remove this just write NAME="Your Os"
+
+#install
+if [ "$choice1" == "install" ] || [ "$choice1" = "i" ]
+then
+    archlinux="Arch Linux"
+        if [ "$NAME" == "$archlinux" ]
+        then
+            paru -S $arg || yay -S $arg || sudo pacman -S $arg || sudo flatpak install $arg || sudo snap install $arg
+        fi
+    ubuntu="Ubuntu"
+        if [ "$NAME" == "$ubuntu" ]
+        then
+            sudo apt install $arg || snap install $arg || sudo flatpak install $arg
+        fi
+fi
+#remove
+if [ "$choice1" == "remove" ] || [ "$choice1" = "r" ]
+then
+    archlinux="Arch Linux"
+        if [ "$NAME" == "$archlinux" ]
+        then
+            paru -R $arg || yay -R $arg || sudo pacman -R $arg || sudo flatpak uninstall $arg || sudo snap remove $arg
+        fi
+    ubuntu="Ubuntu"
+        if [ "$NAME" == "$ubuntu" ]
+        then
+            sudo apt remove $arg || snap remove $arg || sudo flatpak uninstall $arg
+        fi
+fi
+#search
+if [ "$choice1" == "search" ] || [ "$choice1" = "s" ]
+then
+    archlinux="Arch Linux"
+        if [ "$NAME" == "$archlinux" ]
+        then
+            paru $arg || yay $arg
+        fi
+fi
